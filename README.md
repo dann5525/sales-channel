@@ -1,6 +1,6 @@
-# Sales Channels - Real-Time Sales and Inventory Management
+# Sales Channel - Real-Time Sales and Inventory Management
 
-Sales Channels is a blockchain-powered digital cashier system that provides real-time insights into sales, inventory, and seller activity. Built on **Constellation's Metagraph technology** and utilizing the **Euclid SDK**, it enables secure and transparent management of sales operations. Ideal for events like festivals or multi-vendor marketplaces, Sales Channels allows owners to efficiently track transactions, inventory levels, and seller activity.
+Sales Channel is a blockchain-powered digital cashier system that provides real-time insights into sales, inventory, and seller activity. Built on **Constellation's Metagraph technology** and utilizing the **Euclid SDK**, it enables secure and transparent management of sales operations. Ideal for events like festivals or multi-vendor marketplaces, Sales Channel allows owners to efficiently track transactions, inventory levels, and seller activity.
 
 ## Key Features:
 - **Real-Time Sales Tracking**: Monitor sales activity across all vendors instantly.
