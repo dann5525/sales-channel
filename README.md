@@ -17,7 +17,7 @@ Sales Channel is a blockchain-powered digital cashier system that provides real-
 ## Setup Instructions
 
 1. **Clone the Project**:
-   - Copy this Sales Channels folder into your Euclid SDK project folder.
+   - Copy this Sale Channel folder into your Euclid SDK project folder.
 
 2. **Edit Configuration**:
    - Modify the `euclid.json` file in your Euclid SDK project to include the configuration for the Sales Channels project.
