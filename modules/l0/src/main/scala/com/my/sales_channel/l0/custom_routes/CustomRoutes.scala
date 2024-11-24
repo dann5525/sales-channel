@@ -22,13 +22,13 @@ case class CustomRoutes[F[_] : Async](calculatedStateService: CalculatedStateSer
   implicit val logger: SelfAwareStructuredLogger[F] = Slf4jLogger.getLogger[F]
 
   @derive(decoder, encoder)
-  case class SalesChannelResponse(id: String, name: String, owner: Address,  sellers: List[Address], products: Map[String, Long], sales: Map[String, Map[Address, Map[String, Long]]], inventory: Map[Address, Map[String, Long]], startSnapshotOrdinal: Long, endSnapshotOrdinal: Long, status: String)
+  case class SalesChannelResponse(id: String, name: String, owner: Address,  sellers: List[Address], products: Map[String, Long], sales: Map[String, Map[Address, Map[String, Long]]], inventory: Map[String, Map[String, Long]], startSnapshotOrdinal: Long, endSnapshotOrdinal: Long, status: String, stations: List[String] )
 
   private def formatSalesChannel(channel: SalesChannel, lastOrdinal: Long): SalesChannelResponse = {
     if (channel.endSnapshotOrdinal < lastOrdinal) {
-      SalesChannelResponse(channel.id, channel.name, channel.owner,  channel.sellers, channel.products, channel.sales, channel.inventory,  channel.startSnapshotOrdinal, channel.endSnapshotOrdinal, "Closed")
+      SalesChannelResponse(channel.id, channel.name, channel.owner,  channel.sellers, channel.products, channel.sales, channel.inventory,  channel.startSnapshotOrdinal, channel.endSnapshotOrdinal, "Closed", channel.stations)
     } else {
-      SalesChannelResponse(channel.id, channel.name, channel.owner,  channel.sellers, channel.products, channel.sales, channel.inventory,  channel.startSnapshotOrdinal, channel.endSnapshotOrdinal, "Open")
+      SalesChannelResponse(channel.id, channel.name, channel.owner,  channel.sellers, channel.products, channel.sales, channel.inventory,  channel.startSnapshotOrdinal, channel.endSnapshotOrdinal, "Open", channel.stations)
     }
   }
 

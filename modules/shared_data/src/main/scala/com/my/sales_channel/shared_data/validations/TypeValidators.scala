@@ -91,7 +91,7 @@ object TypeValidators {
 
     MissingInventory.whenA {
     !state.calculated.channels.get(moveInventory.channelId).exists { channel =>
-      channel.inventory.get(moveInventory.address).exists { inventory =>
+      channel.inventory.get(moveInventory.fromStation).exists { inventory =>
         inventory.get(moveInventory.product).exists(_ >= moveInventory.amount)
           }
         }

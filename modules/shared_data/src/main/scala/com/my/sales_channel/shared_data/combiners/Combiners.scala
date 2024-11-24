@@ -9,8 +9,10 @@ import org.tessellation.security.hash.Hash
 object Combiners {
   def combineCreateSalesChannel(CreateSalesChannel: CreateSalesChannel, state: DataState[SalesChannelStateOnChain, SalesChannelCalculatedState]): DataState[SalesChannelStateOnChain, SalesChannelCalculatedState] = {
     val channelId = Hash.fromBytes(Serializers.serializeUpdate(CreateSalesChannel)).toString
+   
+    val newsalesStation = List(CreateSalesChannel.station)
     
-    val newState = SalesChannel(channelId, CreateSalesChannel.name, CreateSalesChannel.owner,  CreateSalesChannel.products.toMap, List.empty, Map.empty, CreateSalesChannel.startSnapshotOrdinal, CreateSalesChannel.endSnapshotOrdinal, Map.empty)
+    val newState = SalesChannel(channelId, CreateSalesChannel.name, CreateSalesChannel.owner,  CreateSalesChannel.products.toMap, List.empty, Map.empty, CreateSalesChannel.startSnapshotOrdinal, CreateSalesChannel.endSnapshotOrdinal, Map.empty, newsalesStation)
 
     val newOnChain = SalesChannelStateOnChain(state.onChain.updates :+ CreateSalesChannel)
     val newCalculatedState = state.calculated.focus(_.channels).modify(_.updated(channelId, newState))
@@ -23,7 +25,7 @@ object Combiners {
   
 
   // Define the current seller's inventory
-  val sellerInventory = currentState.inventory.getOrElse(sale.address, Map())
+  val sellerInventory = currentState.inventory.getOrElse(sale.station, Map())
 
   // Calculate the updated inventory for each product in the sale
   val updatedSellerInventory = sale.sale.foldLeft(sellerInventory) {
@@ -42,7 +44,7 @@ object Combiners {
       .focus(_.sales)
       .modify(_.updated(sale.timestamp, Map(sale.address -> sale.sale.toMap)))
       .focus(_.inventory)
-      .modify(_.updated(sale.address, updatedSellerInventory))
+      .modify(_.updated(sale.station, updatedSellerInventory))
 
     // Prepare the new states
     val newOnChain = SalesChannelStateOnChain(state.onChain.updates :+ sale)
@@ -92,7 +94,7 @@ object Combiners {
 
   // Define the current product quantity for the seller
   val currentProductQuantity = currentState.inventory
-    .getOrElse(newInventory.address, Map())
+    .getOrElse(newInventory.station, Map())
     .getOrElse(newInventory.product, 0L)
 
   // Calculate the updated product quantity by adding the new amount
@@ -103,8 +105,8 @@ object Combiners {
     .focus(_.inventory)
     .modify { inventory =>
       inventory.updated(
-        newInventory.address,
-        inventory.getOrElse(newInventory.address, Map()).updated(
+        newInventory.station,
+        inventory.getOrElse(newInventory.station, Map()).updated(
           newInventory.product,
           updatedProductQuantity
         )
@@ -127,11 +129,11 @@ object Combiners {
 
   // Retrieve the current product quantities for the fromAddress and toAddress
   val currentProductQuantityFrom = currentState.inventory
-    .getOrElse(newInventory.address, Map())
+    .getOrElse(newInventory.fromStation, Map())
     .getOrElse(newInventory.product, 0L)
 
   val currentProductQuantityTo = currentState.inventory
-    .getOrElse(newInventory.toAddress, Map())
+    .getOrElse(newInventory.toStation, Map())
     .getOrElse(newInventory.product, 0L)
 
   // Calculate the updated product quantities
@@ -143,14 +145,14 @@ object Combiners {
     .focus(_.inventory)
     .modify { inventory =>
       inventory.updated(
-        newInventory.address,
-        inventory.getOrElse(newInventory.address, Map()).updated(
+        newInventory.fromStation,
+        inventory.getOrElse(newInventory.fromStation, Map()).updated(
           newInventory.product,
           updatedProductQuantityFrom
         )
       ).updated(
-        newInventory.toAddress,
-        inventory.getOrElse(newInventory.toAddress, Map()).updated(
+        newInventory.toStation,
+        inventory.getOrElse(newInventory.toStation, Map()).updated(
           newInventory.product,
           updatedProductQuantityTo
         )

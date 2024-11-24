@@ -15,14 +15,15 @@ const getDAGAddressFromPrivateKey = (privateKey) => {
 const buildCreateSalesChannelMessage = (address) => {
     return {
         CreateSalesChannel: {
-            name: 'alba3',
+            name: 'aba3',
             owner: address,
+            station: "one",
             products: [
                 ['Long', 5],
                 ['Red', 10]
             ],
-            startSnapshotOrdinal: 1,
-            endSnapshotOrdinal: 1000
+            startSnapshotOrdinal: 100,
+            endSnapshotOrdinal: 10000
         }
     };
 };
@@ -44,10 +45,12 @@ const buildCreateVoteMessage = (channelId, address) => {
         Sale: {
             channelId: channelId,
             address: address,
+            station: "first station",
             sale: [
                 ['Long', 2],
                 ['Red', 3]
             ],
+            payment: "Cash",
             timestamp: Date.now().toString()
         }
     };
@@ -59,6 +62,7 @@ const buildAddInventory = (channelId, address) => {
         AddInventory: {
             channelId: channelId,
             address: address,
+            station: "first station",
             product: 'Long',
             amount: 20,
             timestamp: Date.now().toString()
@@ -72,7 +76,9 @@ const buildMoveInventory = (channelId, address) => {
         MoveInventory: {
             channelId: channelId,
             address: address,
-            toAddress: 'DAG4Zd2W2JxL1f1gsHQCoaKrRonPSSHLgcqD7osU',
+            toAddress: address,
+            fromStation: "first station",
+            toStation: 'second station',
             product: 'Long',
             amount: 10,
             timestamp: Date.now().toString()
